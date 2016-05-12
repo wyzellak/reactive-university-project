@@ -23,3 +23,5 @@ libraryDependencies ++= Seq(
 routesGenerator := InjectedRoutesGenerator
 
 fork in run := true
+
+resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns)
