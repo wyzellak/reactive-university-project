@@ -1,8 +1,12 @@
 package actors
 
-import akka.actor.{Props, ActorRef, Actor}
-import utils.{StockQuote, FakeStockQuote}
+import akka.actor.{Actor, ActorRef, Props}
+import utils.{FakeStockQuote, StockQuote}
 import java.util.Random
+
+import model.Quotation
+import model.StockPersistenceContext._
+
 import scala.collection.immutable.{HashSet, Queue}
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
@@ -54,6 +58,21 @@ class StocksActor extends Actor {
   def receive = {
     case watchStock @ WatchStock(symbol) =>
       // get or create the StockActor for the symbol and forward this message
+
+
+
+
+
+//      transactional {
+//        query {
+//          (quotation: Quotation) => where(quotation.company_name :== "CCC") select (quotation) orderBy (quotation.max)
+//        }
+//      }
+
+
+
+
+
       context.child(symbol).getOrElse {
         context.actorOf(Props(new StockActor(symbol)), symbol)
       } forward watchStock

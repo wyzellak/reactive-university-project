@@ -8,7 +8,7 @@ scalaVersion := "2.11.7"
 
 // scalaz-bintray resolver needed for specs2 library
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
-
+resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns)
 libraryDependencies ++= Seq(
   ws, // Play's web services module
   specs2 % Test,
@@ -20,6 +20,10 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.4" % Test
 )
 
+libraryDependencies += "net.fwbrasil" % "activate-core_2.11" % "1.7"
+libraryDependencies += "net.fwbrasil" % "activate-play_2.11" % "1.7"
+libraryDependencies += "org.mariadb.jdbc" % "mariadb-java-client" % "1.4.4"
+
 routesGenerator := InjectedRoutesGenerator
 
-fork in run := true
+fork in run := false
