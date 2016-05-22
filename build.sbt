@@ -1,8 +1,14 @@
 name := """reactive-stocks"""
 
-version := "1.0-SNAPSHOT"
+version := "latest"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala, DockerPlugin)
+  .settings(
+    version in Docker := "latest",
+    NativePackagerKeys.dockerExposedPorts := Seq(9000, 9443),
+    NativePackagerKeys.dockerExposedVolumes := Seq("/opt/docker/logs")
+  )
 
 scalaVersion := "2.11.7"
 
@@ -23,3 +29,5 @@ libraryDependencies ++= Seq(
 routesGenerator := InjectedRoutesGenerator
 
 fork in run := true
+
+resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns)
