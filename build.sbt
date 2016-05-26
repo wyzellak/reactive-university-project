@@ -8,7 +8,6 @@ scalaVersion := "2.11.7"
 
 // scalaz-bintray resolver needed for specs2 library
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
-// resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns) //used by Andrzej in Ubuntu 1
 libraryDependencies ++= Seq(
   ws, // Play's web services module
   specs2 % Test,
