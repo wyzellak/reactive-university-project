@@ -1,0 +1,74 @@
+@(quotationForm: Form[model.QuotationFormData],quotations : Seq[model.Quotation])(implicit request: RequestHeader)
+@main() {
+
+    <form id="quotation-data-form" role="form" action='@routes.QuotationsController.addQuotation()' method="post">
+        <div>Add quotation</div>
+        <div>
+            <span>Company name</span>
+            <input type="text" id="company_name" name="company_name" value="" required>
+        </div>
+        <div>
+            <span>Opening</span>
+            <input type="number" step="0.01" id="opening" name="opening" value="" required>
+        </div>
+        <div>
+            <span>Max</span>
+            <input type="number" step="0.01" id="max" name="max" value="" required>
+        </div>
+        <div>
+            <span>Min</span>
+            <input type="number" step="0.01" id="min" name="min" value="" required>
+        </div>
+        <div>
+            <span>Closing</span>
+            <input type="number" step="0.01" id="closing" name="closing" value="" required>
+        </div>
+        <div>
+            <span>Change percentage</span>
+            <input type="number" step="0.01" id="change_percentage" name="change_percentage" value="" required>
+        </div>
+        <div>
+            <span>Volume</span>
+            <input type="number" id="volume" name="volume" value="" required>
+        </div>
+        <div>
+            <span>Date format yyyy-MM-dd</span>
+            <input type="date" id="date" name="date" value="" required>
+        </div>
+        <div>
+            <button type="submit">Add</button>
+        </div>
+    </form>
+
+    <div>
+        <div>ALIOR quotations</div>
+        <table>
+            <tr>
+                <th>id</th>
+                <th>company name</th>
+                <th>opening</th>
+                <th>max</th>
+                <th>min</th>
+                <th>closing</th>
+                <th>change_percentage</th>
+                <th>volume</th>
+                <th>date</th>
+            </tr>
+            @for(quotation <- quotations){
+                <tr>
+                    <td>@quotation.id</td>
+                    <td>@quotation.company_name</td>
+                    <td>@quotation.opening</td>
+                    <td>@quotation.max</td>
+                    <td>@quotation.min</td>
+                    <td>@quotation.closing</td>
+                    <td>@quotation.change_percentage</td>
+                    <td>@quotation.volume</td>
+                    <td>@quotation.date</td>
+                    <td><a href="@routes.QuotationsController.deleteQuotation(quotation.id)">delete</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+
+}

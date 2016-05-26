@@ -8,7 +8,7 @@ scalaVersion := "2.11.7"
 
 // scalaz-bintray resolver needed for specs2 library
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
-resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns)
+// resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns) //used by Andrzej in Ubuntu 14.04
 libraryDependencies ++= Seq(
   ws, // Play's web services module
   specs2 % Test,
@@ -17,13 +17,12 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-testkit" % "2.3.11" % Test,
   "org.webjars" % "bootstrap" % "2.3.2",
   "org.webjars" % "flot" % "0.8.0",
-  "org.scalatest" %% "scalatest" % "2.2.4" % Test
+  "org.scalatest" %% "scalatest" % "2.2.4" % Test,
+  "mysql" % "mysql-connector-java" % "5.1.36",              //MySQL Connector
+  "com.typesafe.play" %% "play-slick" % "1.1.0",            //ORM
+  "com.typesafe.play" %% "play-slick-evolutions" % "1.1.0"  //ORM
 )
-
-libraryDependencies += "net.fwbrasil" % "activate-core_2.11" % "1.7"
-libraryDependencies += "net.fwbrasil" % "activate-play_2.11" % "1.7"
-libraryDependencies += "org.mariadb.jdbc" % "mariadb-java-client" % "1.4.4"
 
 routesGenerator := InjectedRoutesGenerator
 
-fork in run := false
+fork in run := true
