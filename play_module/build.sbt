@@ -23,7 +23,9 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-testkit" % "2.3.11" % Test,
   "org.webjars" % "bootstrap" % "2.3.2",
   "org.webjars" % "flot" % "0.8.0",
-  "org.scalatest" %% "scalatest" % "2.2.4" % Test
+  "org.scalatest" %% "scalatest" % "2.2.4" % Test,
+  "mysql" % "mysql-connector-java" % "5.1.36",              //MySQL Connector
+  "com.typesafe.play" %% "play-slick" % "1.1.0"             // ORM
 )
 
 routesGenerator := InjectedRoutesGenerator
