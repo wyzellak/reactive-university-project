@@ -10,14 +10,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.libs.Akka
 
 /**
- * There is one StockActor per stock symbol.  The StockActor maintains a list of users watching the stock and the stock
- * values.  Each StockActor updates a rolling dataset of randomly generated stock values.
- */
+  * There is one StockActor per stock symbol.  The StockActor maintains a list of users watching the stock and the stock
+  * values.  Each StockActor updates a rolling dataset of randomly generated stock values.
+  */
 
 class StockActor(symbol: String) extends Actor {
 
   lazy val stockQuote: StockQuote = new FakeStockQuote
-  
+
   protected[this] var watchers: HashSet[ActorRef] = HashSet.empty[ActorRef]
 
   // A random data set which uses stockQuote.newPrice to get each data point
@@ -25,7 +25,7 @@ class StockActor(symbol: String) extends Actor {
     lazy val initialPrices: Stream[java.lang.Double] = (new Random().nextDouble * 800) #:: initialPrices.map(previous => stockQuote.newPrice(previous))
     initialPrices.take(50).to[Queue]
   }
-  
+
   // Fetch the latest stock value every 75ms
   val stockTick = context.system.scheduler.schedule(Duration.Zero, 75.millis, self, FetchLatest)
 
