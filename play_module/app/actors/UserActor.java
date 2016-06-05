@@ -1,5 +1,6 @@
 package actors;
 
+import actors.stock_index.StockIndexActor;
 import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -28,6 +29,9 @@ public class UserActor extends UntypedActor {
         for (String stockSymbol : defaultStocks) {
             StocksActor.stocksActor().tell(new WatchStock(stockSymbol), getSelf());
         }
+
+        // Create the StockIndexActor actor and do some computations
+        StockIndexActor.performCalculations();
     }
     
     public void onReceive(Object message) {
