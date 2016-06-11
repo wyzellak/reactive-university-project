@@ -6,11 +6,14 @@ import play.api.Play
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick.DatabaseConfigProvider
+
 import scala.concurrent.Future
 import slick.driver.JdbcProfile
 import slick.driver.MySQLDriver.api._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.data.format.Formats._
+import play.api.libs.openid.Errors.AUTH_CANCEL
 
 /**
   * @author alisowsk
@@ -100,6 +103,10 @@ object Quotations {
 
   def getByCompanyName(companyName: String): Future[Seq[Quotation]] = {
     dbConfig.db.run(quotations.filter(_.company_name === companyName).result)
+  }
+
+  def getCompanyNames(): Future[Seq[String]] = {
+    dbConfig.db.run(quotations.map(_.company_name).distinct.result)
   }
 
 }

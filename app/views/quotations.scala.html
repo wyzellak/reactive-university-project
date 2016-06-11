@@ -1,4 +1,5 @@
-@(quotationForm: Form[model.QuotationFormData],quotations : Seq[model.Quotation])(implicit request: RequestHeader)
+@import helper._
+@(quotationForm: Form[model.QuotationFormData],quotations : Seq[model.Quotation], companyNames : Seq[String])(implicit request: RequestHeader)
 @main() {
 
     <form id="quotation-data-form" role="form" action='@routes.QuotationsController.addQuotation()' method="post">
@@ -39,6 +40,13 @@
             <button type="submit">Add</button>
         </div>
     </form>
+
+    <div>
+        <div>company names</div>
+        @for(companyName <- companyNames){
+            @companyName
+        }
+    </div>
 
     <div>
         <div>ALIOR quotations</div>

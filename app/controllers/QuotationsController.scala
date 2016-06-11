@@ -16,15 +16,21 @@ import scala.concurrent.Future
 class QuotationsController extends Controller {
 
   def index = Action.async { implicit request =>
-    QuotationService.getByCompanyName("ALIOR") map { quotations =>
-      Ok(views.html.quotations(QuotationForm.form, quotations))
+    val quotationsForAlior = QuotationService.getByCompanyName("ALIOR")
+    val companyNames = QuotationService.getCompanyNames
+
+    quotationsForAlior.flatMap { quotationsForAlior =>
+      companyNames.map { companyNames =>
+        Ok(views.html.quotations(QuotationForm.form, quotationsForAlior, companyNames))
+      }
     }
+
   }
 
   def addQuotation() = Action.async { implicit request =>
     QuotationForm.form.bindFromRequest.fold(
       // if any error in submitted data
-      errorForm => Future.successful(Ok(views.html.quotations(errorForm, Seq.empty[Quotation]))),
+      errorForm => Future.successful(Ok(views.html.quotations(errorForm, Seq.empty[Quotation], Seq.empty[String]))),
       data => {
         val newQuotation = Quotation(0, data.company_name, data.opening, data.max, data.min, data.closing, data.change_percentage, data.volume, data.date)
         QuotationService.addQuotation(newQuotation).map(res =>
