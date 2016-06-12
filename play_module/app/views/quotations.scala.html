@@ -1,5 +1,5 @@
 @import helper._
-@(quotationForm: Form[model.QuotationFormData],quotations : Seq[model.Quotation], companyNames : Seq[String])(implicit request: RequestHeader)
+@(quotationForm: Form[model.QuotationFormData], indexForm: Form[model.IndexFormData], quotations : Seq[model.Quotation], companyNames : Seq[String])(implicit request: RequestHeader)
 @main() {
 
     <form id="quotation-data-form" role="form" action='@routes.QuotationsController.addQuotation()' method="post">

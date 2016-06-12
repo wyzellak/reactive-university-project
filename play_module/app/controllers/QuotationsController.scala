@@ -1,8 +1,8 @@
 package controllers
 
-import model.{Quotation, QuotationForm}
+import model.{IndexForm, Quotation, QuotationForm}
 import play.api.mvc.{Action, _}
-import services.QuotationService
+import services.{IndexService, QuotationService}
 import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.concurrent.Future
@@ -18,7 +18,7 @@ class QuotationsController extends Controller {
 
     quotationsForAlior.flatMap { quotationsForAlior =>
       companyNames.map { companyNames =>
-        Ok(views.html.quotations(QuotationForm.form, quotationsForAlior, companyNames))
+        Ok(views.html.quotations(QuotationForm.form, IndexForm.form, quotationsForAlior, companyNames))
       }
     }
 
@@ -27,7 +27,7 @@ class QuotationsController extends Controller {
   def addQuotation() = Action.async { implicit request =>
     QuotationForm.form.bindFromRequest.fold(
       // if any error in submitted data
-      errorForm => Future.successful(Ok(views.html.quotations(errorForm, Seq.empty[Quotation], Seq.empty[String]))),
+      errorForm => Future.successful(Ok(views.html.quotations(errorForm, IndexForm.form, Seq.empty[Quotation], Seq.empty[String]))),
       data => {
         val newQuotation = Quotation(0, data.company_name, data.opening, data.max, data.min, data.closing, data.change_percentage, data.volume, data.date)
         QuotationService.addQuotation(newQuotation).map(res =>
@@ -41,4 +41,17 @@ class QuotationsController extends Controller {
       Redirect(routes.QuotationsController.index())
     }
   }
+
+  def displayQuotationsByCompany(companyName: String) = TODO
+
+  def runIndex(indexName: String, companyNames: Seq[String]) = Action.async { implicit request =>
+    IndexForm.form.bindFromRequest.fold(
+      errorForm => Future.successful(Ok(views.html.quotations(QuotationForm.form, errorForm, Seq.empty[Quotation], Seq.empty[String]))),
+      data => {
+        IndexService.runIndex(indexName, companyNames).map(res =>
+          Redirect(routes.QuotationsController.index())
+        )
+      })
+  }
+
 }
