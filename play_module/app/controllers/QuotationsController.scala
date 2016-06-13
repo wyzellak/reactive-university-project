@@ -1,5 +1,7 @@
 package controllers
 
+import java.util.Optional
+
 import model.{IndexForm, Quotation, QuotationForm}
 import play.api.mvc.{Action, _}
 import services.{IndexService, QuotationService}
@@ -44,11 +46,11 @@ class QuotationsController extends Controller {
 
   def displayQuotationsByCompany(companyName: String) = TODO
 
-  def runIndex(indexName: String, companyNames: Seq[String]) = Action.async { implicit request =>
+  def runIndex() = Action.async { implicit request =>
     IndexForm.form.bindFromRequest.fold(
       errorForm => Future.successful(Ok(views.html.quotations(QuotationForm.form, errorForm, Seq.empty[Quotation], Seq.empty[String]))),
       data => {
-        IndexService.runIndex(indexName, companyNames).map(res =>
+        IndexService.runIndex("test", Seq.empty).map(res =>
           Redirect(routes.QuotationsController.index())
         )
       })
