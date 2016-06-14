@@ -13,43 +13,33 @@
                     <div class="col-md-4">
                             <h4>Test</h4>
                             <p>Run test index. </p>
-                            <p><a class="btn btn-default" href="#" role="button" type="submit">Run &raquo;</a></p>
+                            <input type="radio" name="index_name" value="INDEX_1"/>
 
                     </div>
                     <div class="col-md-4">
                         <h4>Moving Average</h4>
                         <p></p>
-                        <p><a class="btn btn-default" href="#" role="button">Run &raquo;</a></p>
+                        <input type="radio" name="index_name" value="INDEX_2"/>
                     </div>
                     <div class="col-md-4">
                         <h4>Ease of Movement</h4>
                         <p></p>
-                        <p><select id="select">
-                            @for(companyName <- companyNames){
-                            <option value="@companyName" name="company_name">@companyName</option>
-                            }
-                        </select>
-                            <a class="btn btn-default" href="#" role="button">Run &raquo;</a></p>
+                        <input type="radio" name="index_name" value="INDEX_3"/>
                     </div>
                     <div class="col-md-4">
                         <h4>Average True Range</h4>
                         <p></p>
-                        <p>
+                        <input type="radio" name="index_name" value="INDEX_4"/>
+                    </div>
                         <div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Run
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                @for(quotation <- quotations){
-                                <li>@quotation.company_name</li>
+                            <select id="select" name="company_name">
+                                @for(companyName <- companyNames){
+                                <option value="@companyName">@companyName</option>
                                 }
-                            </ul>
+                            </select>
                         </div>
                         </p>
                     </div>
-                    <input type="text" name="index_name"/>
                     <button type="submit">Add</button>
                 </form>
             </div>
