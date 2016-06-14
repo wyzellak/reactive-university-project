@@ -5,52 +5,56 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">Dashboard</h1>
+        <div class="col-sm-9 col-sm-3 col-md-10 col-md-2 main">
+            <h1 class="page-header">Reactive Stock</h1>
 
             <div class="row">
-                <form id="index-data-form" role="form" action='@routes.QuotationsController.runIndex()' method="post">
+                <form id="quotation-data-form" role="form" action='@routes.QuotationsController.runIndex()'
+                      method="post">
                     <div class="col-md-4">
-                            <h4>Test</h4>
-                            <p>Run test index. </p>
-                            <input type="radio" name="index_name" value="INDEX_1"/>
-
-                    </div>
-                    <div class="col-md-4">
-                        <h4>Moving Average</h4>
-                        <p></p>
-                        <input type="radio" name="index_name" value="INDEX_2"/>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>Ease of Movement</h4>
-                        <p></p>
-                        <input type="radio" name="index_name" value="INDEX_3"/>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>Average True Range</h4>
-                        <p></p>
-                        <input type="radio" name="index_name" value="INDEX_4"/>
-                    </div>
-                        <div class="dropdown">
-                            <select id="select" name="company_name">
+                        <h4>Test</h4>
+                        <p>Run test index. </p>
+                        <p>
+                            <select multiple class="form-control" id=company_id" name="company_name">
+                                <option value="ALL">ALL</option>
                                 @for(companyName <- companyNames){
                                 <option value="@companyName">@companyName</option>
                                 }
                             </select>
-                        </div>
+                        </p>
+                        <p>
+                            <label class="radio-inline">
+                                <input type="radio" name="index_name" id="inlineRadio1" value="INDEX_1">Test
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="index_name" id="inlineRadio2" value="INDEX_2">Moving
+                                Average
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="index_name" id="inlineRadio3" value="INDEX_3">Ease of
+                                Movement
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="index_name" id="inlineRadio4" value="INDEX_4">Average
+                                True Range
+                            </label>
+                        </p>
+                        <p>
+                            <button type="submit" class="btn btn-default">Run &raquo;</button>
                         </p>
                     </div>
-                    <button type="submit">Add</button>
                 </form>
+
             </div>
+
 
             <h2 class="sub-header">Section title</h2>
             <div class="table-responsive">
                 <p>
                 <h3>Select company</h3>
                 <select id="select_company">
-                    @for(quotation <- quotations){
-                    <option value="@quotation.company_name">@quotation.company_name</option>
+                    @for(companyName <- companyNames){
+                    <option value="@companyName">@companyName</option>
                     }
                 </select>
 

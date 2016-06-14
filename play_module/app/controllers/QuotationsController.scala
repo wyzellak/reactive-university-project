@@ -50,7 +50,7 @@ class QuotationsController extends Controller {
     IndexForm.form.bindFromRequest.fold(
       errorForm => Future.successful(Ok(views.html.quotations(QuotationForm.form, errorForm, Seq.empty[Quotation], Seq.empty[String]))),
       data => {
-        IndexService.runIndex("test", Seq.empty).map(res =>
+        IndexService.runIndex(data.indexName, data.companyName).map(res =>
           Redirect(routes.QuotationsController.index())
         )
       })

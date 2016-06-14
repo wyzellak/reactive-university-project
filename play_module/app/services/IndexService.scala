@@ -9,43 +9,17 @@ import scala.concurrent.Future
   */
 object IndexService {
 
-  def runIndex(indexName: String, companyNames: Seq[String]): Future[Int] = {
+  def runIndex(indexName: String, companyName: String): Future[Int] = {
     // TODO
     Future.successful(1)
   }
 
-  private def calculateAverageTrueRange() = {
+  private def calculateTest() = ???
 
-  }
+  private def calculateAverageTrueRange() = ???
 
-  private def calculateEaseOfMovement() = {
+  private def calculateEaseOfMovement() = ???
 
-  }
+  private def calculateMovingAverage() = ???
 
-  private def calculateMovingAverage() = {
-
-  }
-//  def addQuotation(quotation: Quotation): Future[String] = {
-//    Quotations.add(quotation)
-//  }
-//
-//  def deleteQuotation(id: Int): Future[Int] = {
-//    Quotations.delete(id)
-//  }
-//
-//  def getQuotation(id: Int): Future[Option[Quotation]] = {
-//    Quotations.get(id)
-//  }
-//
-//  def getByCompanyName(companyName: String): Future[Seq[Quotation]] = {
-//    Quotations.getByCompanyName(companyName)
-//  }
-//
-//  def listAllQuotations: Future[Seq[Quotation]] = {
-//    Quotations.listAll
-//  }
-//
-//  def getCompanyNames: Future[Seq[String]] = {
-//    Quotations.getCompanyNames()
-//  }
 }
