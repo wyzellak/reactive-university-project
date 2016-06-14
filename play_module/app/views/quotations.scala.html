@@ -1,63 +1,81 @@
 @import helper._
 @(quotationForm: Form[model.QuotationFormData], indexForm: Form[model.IndexFormData], quotations : Seq[model.Quotation], companyNames : Seq[String])(implicit request: RequestHeader)
 @main() {
-
 <div class="container-fluid">
     <div class="row">
-
-        <div class="col-sm-9 col-sm-3 col-md-10 col-md-2 main">
+        <div class="col-sm-9 col-sm-3 col-md-12 main">
             <h1 class="page-header">Reactive Stock</h1>
-
             <div class="row">
                 <form id="quotation-data-form" role="form" action='@routes.QuotationsController.runIndex()'
                       method="post">
-                    <div class="col-md-4">
-                        <h4>Test</h4>
-                        <p>Run test index. </p>
-                        <p>
-                            <select multiple class="form-control" id=company_id" name="company_name">
-                                <option value="ALL">ALL</option>
-                                @for(companyName <- companyNames){
-                                <option value="@companyName">@companyName</option>
-                                }
-                            </select>
-                        </p>
-                        <p>
-                            <label class="radio-inline">
-                                <input type="radio" name="index_name" id="inlineRadio1" value="INDEX_1">Test
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="index_name" id="inlineRadio2" value="INDEX_2">Moving
-                                Average
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="index_name" id="inlineRadio3" value="INDEX_3">Ease of
-                                Movement
-                            </label>
-                            <label class="radio-inline">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <h4>Companies</h4>
+                            <p>
+                                <select multiple class="form-control" id=company_id" name="company_name" size="21">
+                                    <option value="ALL">ALL</option>
+                                    @for(companyName <- companyNames){
+                                    <option value="@companyName">@companyName</option>
+                                    }
+                                </select>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Date range</h4>
+                            Date from:
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" name="date_from">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                            Date to:
+                            <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control" name="date_to">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                            <h4>Index</h4>
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="index_name" id="inlineRadio1" value="INDEX_1">Test
+                                </label>
+                            </div>
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="index_name" id="inlineRadio2" value="INDEX_2">Moving
+                                    Average
+                                </label>
+                            </div>
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="index_name" id="inlineRadio3" value="INDEX_3">Ease of
+                                    Movement
+                                </label>
+                            </div>
+                            <div><label class="radio-inline">
                                 <input type="radio" name="index_name" id="inlineRadio4" value="INDEX_4">Average
                                 True Range
                             </label>
-                        </p>
-                        <p>
-                            <button type="submit" class="btn btn-default">Run &raquo;</button>
-                        </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-default">Run &raquo;</button>
                     </div>
                 </form>
-
             </div>
-
-
             <h2 class="sub-header">Section title</h2>
             <div class="table-responsive">
                 <p>
                 <h3>Select company</h3>
-                <select id="select_company">
+                <select id="select_company" onChange="window.location.href=this.value">
+                    <option value="#">-</option>
                     @for(companyName <- companyNames){
-                    <option value="@companyName">@companyName</option>
+                    <option value="@routes.QuotationsController.displayQuotations(companyName)">@companyName</option>
                     }
                 </select>
-
                 </p>
                 <table class="table table-striped">
                     <tr>
@@ -89,5 +107,5 @@
         </div>
     </div>
 </div>
-
 }
+

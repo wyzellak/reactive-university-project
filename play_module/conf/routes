@@ -9,6 +9,7 @@ GET     /sentiment/:symbol          controllers.StockSentiment.get(symbol)
 # Quotations
 GET     /quotations                 controllers.QuotationsController.index
 POST    /quotations/add             controllers.QuotationsController.addQuotation
+GET    /quotations/display/:name    controllers.QuotationsController.displayQuotations(name : String)
 GET     /quotations/delete/:id      controllers.QuotationsController.deleteQuotation(id : Int)
 POST    /quotations/index           controllers.QuotationsController.runIndex
 
