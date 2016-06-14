@@ -1,29 +1,16 @@
-import akka.cluster.Cluster
-import akka.cluster.ClusterEvent._
-import akka.actor.ActorLogging
-import akka.actor.Actor
+import com.typesafe.config.ConfigFactory
+import akka.actor.ActorSystem
+import akka.actor.Props
 
-class SeedNodeApp extends Actor with ActorLogging {
-
-  val cluster = Cluster(context.system)
-
-  // subscribe to cluster changes, re-subscribe when restart
-  override def preStart(): Unit = {
-    //#subscribe
-    cluster.subscribe(self, initialStateMode = InitialStateAsEvents,
-      classOf[MemberEvent], classOf[UnreachableMember])
-    //#subscribe
-  }
-  override def postStop(): Unit = cluster.unsubscribe(self)
-
-  def receive = {
-    case MemberUp(member) =>
-      log.info("Member is Up: {}", member.address)
-    case UnreachableMember(member) =>
-      log.info("Member detected as unreachable: {}", member)
-    case MemberRemoved(member, previousStatus) =>
-      log.info("Member is Removed: {} after {}",
-        member.address, previousStatus)
-    case _: MemberEvent => // ignore
+/**
+  * Created by antosikj (Jakub Antosik) on 02/06/16.
+  */
+object SeedNodeApp {
+  def main(args: Array[String]) {
+    SeedNodeListener.main(Array("2551"))
+    SeedNodeListener.main(Array("2552"))
+    SeedNodeListener.main(Array("2553"))
+    SeedNodeListener.main(Array("0"))
+    SeedNodeListener.main(Array("0"))
   }
 }
