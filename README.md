@@ -86,6 +86,18 @@ CREATE TABLE IF NOT EXISTS `quotation` (
 
 Complete SQL file with inserts: stock_exchange.sql.
 
+### DB Initialisation
+
+This is done by docker-compose when creating the DB docker image. It runs `stock_exchange.sql` contents on the DB.
+If you need to recreate your DB, just run:
+
+```
+docker rm reactiveuniversityproject_db_1 && docker rmi reactiveuniversityproject_db
+```
+
+This will remove the appropriate container and its associated image. The next time you run `docker-compose up`,
+a new image will be created.
+
 ### ORM
 As for ORM, [http://slick.lightbend.com/docs/] in version 1.1.0 has been chosen.
 
@@ -97,5 +109,4 @@ localhost:9000/quotations - presents list of 'ALIOR' quotations, allows to add n
 
 ## TODOs
 
-* Run provided SQL init when MySQL docker is up
 * Provide an Akka cluster (seed/workers)
