@@ -12,13 +12,15 @@ import scala.concurrent.Future
   */
 class QuotationsController extends Controller {
 
-  def index = Action.async { implicit request =>
+  def index(name: String) = Action.async { implicit request =>
+    val quotationsForCompany = QuotationService.getByCompanyName(name)
     val companyNames = QuotationService.getCompanyNames
 
+    quotationsForCompany.flatMap { quotations =>
       companyNames.map { companyNames =>
-        Ok(views.html.quotations(QuotationForm.form, IndexForm.form, Seq.empty[Quotation], companyNames))
+        Ok(views.html.quotations(QuotationForm.form, IndexForm.form, quotations, companyNames))
       }
-
+    }
   }
 
   def addQuotation() = Action.async { implicit request =>
@@ -30,26 +32,18 @@ class QuotationsController extends Controller {
         data => {
           val newQuotation = Quotation(0, data.company_name, data.opening, data.max, data.min, data.closing, data.change_percentage, data.volume, data.date)
           QuotationService.addQuotation(newQuotation).map(res =>
-            Redirect(routes.QuotationsController.index())
+            Redirect(routes.QuotationsController.index(data.company_name))
           )
         })
     }
   }
 
   def deleteQuotation(id: Int) = Action.async { implicit request =>
-    QuotationService.deleteQuotation(id) map { res =>
-      Redirect(routes.QuotationsController.index())
-    }
-  }
+    val quotation = QuotationService.getQuotation(id)
+    QuotationService.deleteQuotation(id)
 
-  def displayQuotations(name: String) = Action.async { implicit request =>
-    val quotationsForCompany = QuotationService.getByCompanyName(name)
-    val companyNames = QuotationService.getCompanyNames
-
-    quotationsForCompany.flatMap { quotations =>
-      companyNames.map { companyNames =>
-        Ok(views.html.quotations(QuotationForm.form, IndexForm.form, quotations, companyNames))
-      }
+    quotation.map { q =>
+      Redirect(routes.QuotationsController.index(q.get.company_name))
     }
   }
 
@@ -61,7 +55,7 @@ class QuotationsController extends Controller {
         errorForm => Future.successful(Ok(views.html.quotations(QuotationForm.form, errorForm, Seq.empty[Quotation], names))),
         data => {
           IndexService.runIndex(data.indexName, data.companyName).map(res =>
-            Redirect(routes.QuotationsController.index())
+            Redirect(routes.QuotationsController.index(data.companyName))
           )
         })
     }

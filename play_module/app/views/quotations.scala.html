@@ -13,7 +13,6 @@
                             <h4>Companies</h4>
                             <p>
                                 <select multiple class="form-control" id=company_id" name="company_name" size="21">
-                                    <option value="ALL">ALL</option>
                                     @for(companyName <- companyNames){
                                     <option value="@companyName">@companyName</option>
                                     }
@@ -71,7 +70,7 @@
                 <select id="select_company" onChange="window.location.href=this.value">
                     <option value="#">-</option>
                     @for(companyName <- companyNames){
-                    <option value="@routes.QuotationsController.displayQuotations(companyName)">@companyName</option>
+                    <option value="@routes.QuotationsController.index(companyName)">@companyName</option>
                     }
                 </select>
                 </p>
