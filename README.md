@@ -29,6 +29,12 @@ Finally, you can run your new image by:
 docker run -p 9000:9000 reactive-stocks:latest
 ```
 
+or just run the whole project with
+
+```
+docker-compose up
+```
+
 Then navigate to (http://localhost:9000/) to see the results.
 _You might need to replace `localhost` with IP of your docker-machine/boot2docker._
 
@@ -88,3 +94,8 @@ Information about connection is located in file conf/application.conf.
 ### Demonstration
 localhost:9000/quotations - presents list of 'ALIOR' quotations, allows to add new and delete existing ones
 
+
+## TODOs
+
+* Run provided SQL init when MySQL docker is up
+* Provide an Akka cluster (seed/workers)
