@@ -29,7 +29,8 @@ seedapp2:
     - db
 
 db:
-  image: dgraziotin/mysql
+  build: .
+  dockerfile: mysql-dockerfile
   ports:
     - "3306:3306"
   environment:
