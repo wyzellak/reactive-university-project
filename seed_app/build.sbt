@@ -5,8 +5,9 @@ version := "latest"
 lazy val seed_app = (project in file("."))
   .enablePlugins(JavaAppPackaging)
   .settings(
+    mainClass in Compile := Some("SeedNodeApp"),
     version in Docker := "latest",
-    NativePackagerKeys.dockerExposedPorts := Seq(9001, 9444),
+    NativePackagerKeys.dockerExposedPorts := Seq(9001, 9444, 2551, 2552, 2553),
     NativePackagerKeys.dockerExposedVolumes := Seq("/opt/docker/logs")
   )
 

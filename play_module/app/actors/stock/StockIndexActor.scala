@@ -1,4 +1,4 @@
-package actors.stock_index
+package actors.stock
 
 import akka.actor._
 import akka.routing.{RoundRobinPool}

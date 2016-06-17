@@ -1,13 +1,16 @@
 package actors
 
-import akka.actor.{Props, ActorRef, Actor}
-import utils.{StockQuote, FakeStockQuote}
+import akka.actor.{Actor, ActorRef, Props}
+import utils.{FakeStockQuote, StockQuote}
 import java.util.Random
+
 import scala.collection.immutable.{HashSet, Queue}
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.libs.Akka
+
+import scala.collection.mutable.ListBuffer
 
 /**
   * There is one StockActor per stock symbol.  The StockActor maintains a list of users watching the stock and the stock
@@ -63,6 +66,25 @@ class StocksActor extends Actor {
     case unwatchStock @ UnwatchStock(None) =>
       // if no symbol is specified, forward to everyone
       context.children.foreach(_.forward(unwatchStock))
+  }
+
+  def calculateWeightedMovingAverage(closingDayPrices: List[Double])={
+    val sum: Double= closingDayPrices.sum
+    sum/closingDayPrices.size
+  }
+
+  def simulateStockCalculation(closingDayPricesForLongerPeriod: List[Double])={
+    val closingDayPricesForLongerPeriodAmount = closingDayPricesForLongerPeriod.size
+    var middleSlot = closingDayPricesForLongerPeriodAmount/2
+    var results = new ListBuffer[Double]()
+
+    for( i <- 0 until middleSlot) {
+      results+= calculateWeightedMovingAverage(List(closingDayPricesForLongerPeriod).slice(i, middleSlot).flatten)
+      if(middleSlot<=closingDayPricesForLongerPeriodAmount){
+        middleSlot+=1
+      }
+    }
+    results
   }
 }
 

@@ -29,6 +29,12 @@ Finally, you can run your new image by:
 docker run -p 9000:9000 reactive-stocks:latest
 ```
 
+or just run the whole project with
+
+```
+docker-compose up
+```
+
 Then navigate to (http://localhost:9000/) to see the results.
 _You might need to replace `localhost` with IP of your docker-machine/boot2docker._
 
@@ -80,6 +86,18 @@ CREATE TABLE IF NOT EXISTS `quotation` (
 
 Complete SQL file with inserts: stock_exchange.sql.
 
+### DB Initialisation
+
+This is done by docker-compose when creating the DB docker image. It runs `stock_exchange.sql` contents on the DB.
+If you need to recreate your DB, just run:
+
+```
+docker rm reactiveuniversityproject_db_1 && docker rmi reactiveuniversityproject_db
+```
+
+This will remove the appropriate container and its associated image. The next time you run `docker-compose up`,
+a new image will be created.
+
 ### ORM
 As for ORM, [http://slick.lightbend.com/docs/] in version 1.1.0 has been chosen.
 
@@ -88,3 +106,7 @@ Information about connection is located in file conf/application.conf.
 ### Demonstration
 localhost:9000/quotations - presents list of 'ALIOR' quotations, allows to add new and delete existing ones
 
+
+## TODOs
+
+* Provide an Akka cluster (seed/workers)
