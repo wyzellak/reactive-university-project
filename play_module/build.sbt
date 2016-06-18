@@ -30,6 +30,7 @@ libraryDependencies ++= Seq(
 
 routesGenerator := InjectedRoutesGenerator
 
+// set to 'false' to enable debugging
 fork in run := true
 
 resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns)

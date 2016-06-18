@@ -1,8 +1,8 @@
 package controllers
 
-import model.{Quotation, QuotationForm}
+import model.{IndexForm, Quotation, QuotationForm}
 import play.api.mvc.{Action, _}
-import services.QuotationService
+import services.{IndexService, QuotationService}
 import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.concurrent.Future
@@ -12,27 +12,53 @@ import scala.concurrent.Future
   */
 class QuotationsController extends Controller {
 
-  def index = Action.async { implicit request =>
-    QuotationService.getByCompanyName("ALIOR") map { quotations =>
-      Ok(views.html.quotations(QuotationForm.form, quotations))
+  def index(name: String) = Action.async { implicit request =>
+    val quotationsForCompany = QuotationService.getByCompanyName(name)
+    val companyNames = QuotationService.getCompanyNames
+
+    quotationsForCompany.flatMap { quotations =>
+      companyNames.map { companyNames =>
+        Ok(views.html.quotations(QuotationForm.form, IndexForm.form, quotations, companyNames))
+      }
     }
   }
 
   def addQuotation() = Action.async { implicit request =>
-    QuotationForm.form.bindFromRequest.fold(
-      // if any error in submitted data
-      errorForm => Future.successful(Ok(views.html.quotations(errorForm, Seq.empty[Quotation]))),
-      data => {
-        val newQuotation = Quotation(0, data.company_name, data.opening, data.max, data.min, data.closing, data.change_percentage, data.volume, data.date)
-        QuotationService.addQuotation(newQuotation).map(res =>
-          Redirect(routes.QuotationsController.index())
-        )
-      })
+    val companyNames = QuotationService.getCompanyNames
+
+    companyNames.flatMap { names =>
+      QuotationForm.form.bindFromRequest.fold(
+        errorForm => Future.successful(Ok(views.html.quotations(errorForm, IndexForm.form, Seq.empty[Quotation], names))),
+        data => {
+          val newQuotation = Quotation(0, data.company_name, data.opening, data.max, data.min, data.closing, data.change_percentage, data.volume, data.date)
+          QuotationService.addQuotation(newQuotation).map(res =>
+            Redirect(routes.QuotationsController.index(data.company_name))
+          )
+        })
+    }
   }
 
   def deleteQuotation(id: Int) = Action.async { implicit request =>
-    QuotationService.deleteQuotation(id) map { res =>
-      Redirect(routes.QuotationsController.index())
+    val quotation = QuotationService.getQuotation(id)
+    QuotationService.deleteQuotation(id)
+
+    quotation.map { q =>
+      Redirect(routes.QuotationsController.index(q.get.company_name))
     }
   }
+
+  def runIndex() = Action.async { implicit request =>
+    val companyNames = QuotationService.getCompanyNames
+
+    companyNames.flatMap { names =>
+      IndexForm.form.bindFromRequest.fold(
+        errorForm => Future.successful(Ok(views.html.quotations(QuotationForm.form, errorForm, Seq.empty[Quotation], names))),
+        data => {
+          IndexService.runIndex(data.indexName, List("ALIOR")).map(res =>
+            Redirect(routes.QuotationsController.index(""))
+          )
+        })
+    }
+  }
+
 }

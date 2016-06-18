@@ -7,9 +7,11 @@ GET     /ws                         controllers.Application.ws
 GET     /sentiment/:symbol          controllers.StockSentiment.get(symbol)
 
 # Quotations
-GET     /quotations                 controllers.QuotationsController.index
+GET     /quotations                 controllers.QuotationsController.index(name = "")
+GET     /quotations/:name           controllers.QuotationsController.index(name : String)
 POST    /quotations/add             controllers.QuotationsController.addQuotation
 GET     /quotations/delete/:id      controllers.QuotationsController.deleteQuotation(id : Int)
+POST    /quotations/index           controllers.QuotationsController.runIndex
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

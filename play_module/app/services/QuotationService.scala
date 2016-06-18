@@ -28,4 +28,8 @@ object QuotationService {
   def listAllQuotations: Future[Seq[Quotation]] = {
     Quotations.listAll
   }
+
+  def getCompanyNames: Future[Seq[String]] = {
+    Quotations.getCompanyNames()
+  }
 }
