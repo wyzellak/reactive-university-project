@@ -12,7 +12,7 @@
                         <div class="col-md-6">
                             <h4>Companies</h4>
                             <p>
-                                <select multiple class="form-control" id=company_id" name="company_name" size="21">
+                                <select class="form-control" id=company_id" size="21" multiple="multiple" name="company_names">
                                     @for(companyName <- companyNames){
                                     <option value="@companyName">@companyName</option>
                                     }

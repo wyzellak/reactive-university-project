@@ -9,7 +9,7 @@ import scala.concurrent.Future
   */
 object IndexService {
 
-  def runIndex(indexName: String, companyName: String): Future[Int] = {
+  def runIndex(indexName: String, companyNames: Seq[String]): Future[Int] = {
     // TODO
     Future.successful(1)
   }

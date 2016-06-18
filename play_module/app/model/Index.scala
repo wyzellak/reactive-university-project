@@ -8,14 +8,14 @@ import play.api.data.Forms._
   */
 case class IndexFormData(
           indexName: String,
-          companyName: String
+          companyNames: Seq[String]
           )
 
 object IndexForm {
   val form = Form(
     mapping(
       "index_name" -> nonEmptyText,
-      "company_name" -> nonEmptyText
+      "company_names" -> seq(nonEmptyText)
     )(IndexFormData.apply)(IndexFormData.unapply)
   )
 }
