@@ -37,7 +37,7 @@ if [ "$CREATE_MYSQL_USER" = true ]; then
     mysql -uroot -e "CREATE USER '${_user}'@'%' IDENTIFIED BY  '${_userpass}'"
     mysql -uroot -e "GRANT USAGE ON *.* TO  '${_user}'@'%' IDENTIFIED BY '${_userpass}'"
     mysql -uroot -e "CREATE DATABASE IF NOT EXISTS ${_userdb}"
-    mysql -uroot -e "GRANT ALL PRIVILEGES ON ${_userdb}.* TO '${_user}'@'%'"
+    mysql -uroot -e "GRANT ALL PRIVILEGES ON ${_userdb}.* TO '${_user}'@'%' WITH GRANT OPTION"
 fi
 
 echo "=> Done!"
