@@ -65,7 +65,7 @@ object IndexService {
     * @return
     */
   private def calculateMovingAverage(): Future[Double] = {
-//   TODO calculateMovingAveragesOnActorSystem(QuotationService.listAllQuotations TUTAJ JEST FUTURE, dateFrom, dateTo)
+//   TODO calculateMovingAveragesOnActorSystem(QuotationService.listAllQuotations , dateFrom, dateTo)
     //TODO invoke calculateMovingAveragesOnActorSystem(companiesData: List[Quotation], dateFrom: java.util.Date, dateTo: java.util.Date)
     //from actor system  - will return list of values for date interval for given stock
     //TODO calculateAverageFromMovingAveragesForIndex() - to powinno zwrocic wynik

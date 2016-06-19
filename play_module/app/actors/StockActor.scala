@@ -1,7 +1,4 @@
 package actors
-
-import io.lamma.Date
-
 import akka.actor.{Actor, ActorRef, Props}
 import utils.{FakeStockQuote, StockQuote}
 import java.util.{Date, Random}
@@ -16,6 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.libs.Akka
 
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.{Await, Future}
 
 /**
   * There is one StockActor per stock symbol.  The StockActor maintains a list of users watching the stock and the stock
@@ -75,7 +73,8 @@ class StocksActor extends Actor {
 
 
 
-  def calculateMovingAveragesOnActorSystem(companiesData: List[Quotation], dateFrom: java.util.Date, dateTo: java.util.Date) = {
+
+  def calculateMovingAveragesOnActorSystem(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date) = {
     val start = new DateTime(dateFrom)
     val end = new DateTime(dateTo)
     var stockValuesForPeriodDateFromDateTo = new ListBuffer[Double]
@@ -118,10 +117,15 @@ class StocksActor extends Actor {
     * @param date
     * @return
     */
-  def calculateAverageValueForStockForGivenDay(companiesData: List[Quotation], date: java.util.Date) = {
+
+  def calculateAverageValueForStockForGivenDay(companiesData: Future[List[Quotation]], date: java.util.Date) = {
     var counter = 0;
     var stockValueForGivenDay: Float = 0;
-    companiesData.map(q=>if(q.date.equals(date)){
+    val fivemin = 5.minute
+    val listFromFuture =  Await.result(companiesData, fivemin)
+//    val listFromFuture = companiesData.result(fivemin)
+    //Dirty hack!!!!
+    listFromFuture.map(q=>if(q.date.equals(date)){
       stockValueForGivenDay+=q.closing
       counter+=1
     })
