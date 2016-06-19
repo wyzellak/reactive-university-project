@@ -12,7 +12,7 @@
                         <div class="col-md-6">
                             <h4>Companies</h4>
                             <p>
-                                <select class="form-control" id=company_id" size="21" multiple="multiple" name="company_names">
+                                <select class="form-control" id=company_id" size="21" multiple="multiple" name="company_names[]">
                                     @for(companyName <- companyNames){
                                     <option value="@companyName">@companyName</option>
                                     }
@@ -38,23 +38,23 @@
                             <h4>Index</h4>
                             <div>
                                 <label class="radio-inline">
-                                    <input type="radio" name="index_name" id="inlineRadio1" value="INDEX_1">Test
+                                    <input type="radio" name="index_name" id="inlineRadio1" value="TEST">Test
                                 </label>
                             </div>
                             <div>
                                 <label class="radio-inline">
-                                    <input type="radio" name="index_name" id="inlineRadio2" value="INDEX_2">Moving
+                                    <input type="radio" name="index_name" id="inlineRadio2" value="MOVING_AVERAGE">Moving
                                     Average
                                 </label>
                             </div>
                             <div>
                                 <label class="radio-inline">
-                                    <input type="radio" name="index_name" id="inlineRadio3" value="INDEX_3">Ease of
+                                    <input type="radio" name="index_name" id="inlineRadio3" value="EASE_OF_MOVEMENT">Ease of
                                     Movement
                                 </label>
                             </div>
                             <div><label class="radio-inline">
-                                <input type="radio" name="index_name" id="inlineRadio4" value="INDEX_4">Average
+                                <input type="radio" name="index_name" id="inlineRadio4" value="AVERAGE_TRUE_RANGE">Average
                                 True Range
                             </label>
                             </div>

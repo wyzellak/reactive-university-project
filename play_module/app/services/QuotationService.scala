@@ -8,7 +8,6 @@ import scala.concurrent.Future
   * @author alisowsk
   */
 object QuotationService {
-
   def addQuotation(quotation: Quotation): Future[String] = {
     Quotations.add(quotation)
   }
@@ -22,7 +21,11 @@ object QuotationService {
   }
 
   def getByCompanyName(companyName: String): Future[Seq[Quotation]] = {
-    Quotations.getByCompanyName(companyName)
+    Quotations.getByCompanyNames(List(companyName))
+  }
+
+  def getByCompanyNames(companyName: Seq[String]): Future[Seq[Quotation]] = {
+    Quotations.getByCompanyNames(companyName)
   }
 
   def listAllQuotations: Future[Seq[Quotation]] = {

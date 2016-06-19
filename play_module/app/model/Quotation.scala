@@ -101,8 +101,8 @@ object Quotations {
     dbConfig.db.run(quotations.result)
   }
 
-  def getByCompanyName(companyName: String): Future[Seq[Quotation]] = {
-    dbConfig.db.run(quotations.filter(_.company_name === companyName).result)
+  def getByCompanyNames(companyNames: Seq[String]): Future[Seq[Quotation]] = {
+    dbConfig.db.run(quotations.filter(_.company_name inSet companyNames).result)
   }
 
   def getCompanyNames(): Future[Seq[String]] = {
