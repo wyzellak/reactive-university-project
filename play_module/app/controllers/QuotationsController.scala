@@ -1,6 +1,6 @@
 package controllers
 
-import model.{IndexForm, Quotation, QuotationForm}
+import model.{IndexForm, IndexName, Quotation, QuotationForm}
 import play.api.mvc.{Action, _}
 import services.{IndexService, QuotationService}
 import play.api.libs.concurrent.Execution.Implicits._
@@ -54,7 +54,7 @@ class QuotationsController extends Controller {
       IndexForm.form.bindFromRequest.fold(
         errorForm => Future.successful(Ok(views.html.quotations(QuotationForm.form, errorForm, Seq.empty[Quotation], names))),
         data => {
-          IndexService.runIndex(data.indexName, List("ALIOR")).map(res =>
+          IndexService.runIndex(IndexName.withName(data.indexName), data.companyNames).map(res =>
             Redirect(routes.QuotationsController.index(""))
           )
         })
