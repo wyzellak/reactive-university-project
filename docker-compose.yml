@@ -2,31 +2,31 @@
 
 playapp:
   image: reactive-stocks:latest
-  expose:
-    - "9001"
-    - "9444"
+  ports:
+    - "9000:9000"
+    - "9443:9443"
   links:
     - db
 
-seedapp1:
-  image: reactive-stocks-seed-node:latest
-  expose:
-    - "2551"
-    - "2552"
-    - "2553"
-  restart: always
-  links:
-    - db
-
-seedapp2:
-  image: reactive-stocks-seed-node:latest
-  expose:
-    - "2551"
-    - "2552"
-    - "2553"
-  restart: always
-  links:
-    - db
+#seedapp1:
+#  image: reactive-stocks-seed-node:latest
+#  expose:
+#    - "2551"
+#    - "2552"
+#    - "2553"
+#  restart: always
+#  links:
+#    - db
+#
+#seedapp2:
+#  image: reactive-stocks-seed-node:latest
+#  expose:
+#    - "2551"
+#    - "2552"
+#    - "2553"
+#  restart: always
+#  links:
+#    - db
 
 db:
   build: .
