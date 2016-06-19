@@ -1,8 +1,13 @@
 package actors
 
+import io.lamma.Date
+
 import akka.actor.{Actor, ActorRef, Props}
 import utils.{FakeStockQuote, StockQuote}
-import java.util.Random
+import java.util.{Date, Random}
+
+import model.{Quotation, Quotations}
+import org.joda.time.{DateTime, Days}
 
 import scala.collection.immutable.{HashSet, Queue}
 import scala.collection.JavaConverters._
@@ -68,30 +73,76 @@ class StocksActor extends Actor {
       context.children.foreach(_.forward(unwatchStock))
   }
 
+
+
+  def calculateMovingAveragesOnActorSystem(companiesData: List[Quotation], dateFrom: java.util.Date, dateTo: java.util.Date) = {
+    val start = new DateTime(dateFrom)
+    val end = new DateTime(dateTo)
+    var stockValuesForPeriodDateFromDateTo = new ListBuffer[Double]
+
+    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date =>
+      stockValuesForPeriodDateFromDateTo+=this
+      .calculateAverageValueForStockForGivenDay(companiesData, new java.util.Date(date.yyyy,date.mm,date.dd)))
+
+    this.calculateMovingAveragesForIndex(stockValuesForPeriodDateFromDateTo.toList)
+  }
+
+  def calculateAverageFromMovingAveragesForIndex(closingDayPrices: List[Double]): Double = {
+    this.calculateWeightedMovingAverage(closingDayPrices)
+  }
+
   def calculateWeightedMovingAverage(closingDayPrices: List[Double])={
     val sum: Double= closingDayPrices.sum
     sum/closingDayPrices.size
   }
 
-  def simulateStockCalculation(closingDayPricesForLongerPeriod: List[Double])={
-    val closingDayPricesForLongerPeriodAmount = closingDayPricesForLongerPeriod.size
+  def calculateMovingAveragesForIndex(closingDayIndexPricesForLongerPeriod: List[Double])={
+    val closingDayPricesForLongerPeriodAmount = closingDayIndexPricesForLongerPeriod.size
     var middleSlot = closingDayPricesForLongerPeriodAmount/2
     var results = new ListBuffer[Double]()
 
     for( i <- 0 until middleSlot) {
-      results+= calculateWeightedMovingAverage(List(closingDayPricesForLongerPeriod).slice(i, middleSlot).flatten)
+      val listToBePassed = closingDayIndexPricesForLongerPeriod.slice(i, middleSlot)
+      var resultToBeAppended = calculateWeightedMovingAverage(listToBePassed)
+      results += resultToBeAppended
       if(middleSlot<=closingDayPricesForLongerPeriodAmount){
         middleSlot+=1
       }
     }
     results
   }
+
+  /**
+    *
+    * @param companiesData
+    * @param date
+    * @return
+    */
+  def calculateAverageValueForStockForGivenDay(companiesData: List[Quotation], date: java.util.Date) = {
+    var counter = 0;
+    var stockValueForGivenDay: Float = 0;
+    companiesData.map(q=>if(q.date.equals(date)){
+      stockValueForGivenDay+=q.closing
+      counter+=1
+    })
+
+    stockValueForGivenDay/counter
+  }
+
+
 }
 
 object StocksActor {
   lazy val stocksActor: ActorRef = Akka.system.actorOf(Props(classOf[StocksActor]))
 }
 
+/**
+  * u
+  *
+  * @param symbol
+  * @param companiesData
+  */
+case class MovingAverageCalculation(symbol: String, companiesData: List[Quotation])
 
 case object FetchLatest
 

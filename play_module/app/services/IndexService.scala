@@ -3,9 +3,12 @@ package services
 import java.time.{LocalDate, ZoneId}
 import java.util.Date
 
+import actors.StocksActor
+import akka.actor.{ActorSystem, Props}
 import model.IndexName.IndexName
 import model.{IndexName, Quotation}
 import play.api.libs.concurrent.Execution.Implicits._
+import services.QuotationService.listAllQuotations
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -52,12 +55,22 @@ object IndexService {
   }
 
   private def calculateEaseOfMovement(): Future[Double] = {
-    //TODO
+//TODO
+
     Future.successful(1.0)
   }
 
+  /**
+    * uot
+    * @return
+    */
   private def calculateMovingAverage(): Future[Double] = {
-    //TODO
+//   TODO calculateMovingAveragesOnActorSystem(QuotationService.listAllQuotations TUTAJ JEST FUTURE, dateFrom, dateTo)
+    //TODO invoke calculateMovingAveragesOnActorSystem(companiesData: List[Quotation], dateFrom: java.util.Date, dateTo: java.util.Date)
+    //from actor system  - will return list of values for date interval for given stock
+    //TODO calculateAverageFromMovingAveragesForIndex() - to powinno zwrocic wynik
+
+
     Future.successful(1.0)
   }
 
