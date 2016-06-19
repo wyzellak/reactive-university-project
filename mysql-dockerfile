@@ -3,4 +3,6 @@ FROM dgraziotin/mysql
 MAINTAINER Kuba Antosik <find-me-on-github@example.com>
 
 COPY stock_exchange.sql init.sql
-COPY create_mysql_users.sh create_mysql_users.sh
+COPY mysql-docker-files/create_mysql_users.sh create_mysql_users.sh
+COPY mysql-docker-files/my.cnf /etc/mysql/my.cnf
+RUN chmod 777 create_mysql_users.sh
