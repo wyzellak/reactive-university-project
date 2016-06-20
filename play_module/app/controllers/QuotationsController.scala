@@ -18,7 +18,7 @@ class QuotationsController extends Controller {
 
     quotationsForCompany.flatMap { quotations =>
       companyNames.map { companyNames =>
-        Ok(views.html.quotations(QuotationForm.form, IndexForm.form, quotations, companyNames))
+        Ok(views.html.quotations(QuotationForm.form, IndexForm.form, quotations, companyNames, 0))
       }
     }
   }
@@ -28,7 +28,7 @@ class QuotationsController extends Controller {
 
     companyNames.flatMap { names =>
       QuotationForm.form.bindFromRequest.fold(
-        errorForm => Future.successful(Ok(views.html.quotations(errorForm, IndexForm.form, Seq.empty[Quotation], names))),
+        errorForm => Future.successful(Ok(views.html.quotations(errorForm, IndexForm.form, Seq.empty[Quotation], names, 0))),
         data => {
           val newQuotation = Quotation(0, data.company_name, data.opening, data.max, data.min, data.closing, data.change_percentage, data.volume, data.date)
           QuotationService.addQuotation(newQuotation).map(res =>
@@ -52,10 +52,10 @@ class QuotationsController extends Controller {
 
     companyNames.flatMap { names =>
       IndexForm.form.bindFromRequest.fold(
-        errorForm => Future.successful(Ok(views.html.quotations(QuotationForm.form, errorForm, Seq.empty[Quotation], names))),
+        errorForm => Future.successful(Ok(views.html.quotations(QuotationForm.form, errorForm, Seq.empty[Quotation], names, 0))),
         data => {
           IndexService.runIndex(IndexName.withName(data.indexName), data.companyNames).map(res =>
-            Redirect(routes.QuotationsController.index(""))
+            Ok(views.html.quotations(QuotationForm.form, IndexForm.form, Seq.empty[Quotation], names, res))
           )
         })
     }
