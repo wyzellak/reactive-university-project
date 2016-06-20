@@ -134,6 +134,52 @@ class StocksActor extends Actor {
   }
 
 
+  def calculateMaxValueOfCompanyForGivenPeriod(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Float = {
+    var counter = 0;
+    var stockValueForGivenDay: Float = 0;
+    val fivemin = 5.minute
+    val listFromFuture: List[Quotation] =  Await.result(companiesData, fivemin)
+    var selectedQuotations = new ListBuffer[Quotation]
+    var maxValues = new ListBuffer[Float]
+    //    val listFromFuture = companiesData.result(fivemin)
+    //Dirty hack!!!!
+    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date=>listFromFuture.map(q=>if (q.date.equals(date)){
+      selectedQuotations += q
+    }))
+    selectedQuotations.map(q=>maxValues+=q.max)
+    return maxValues.max
+  }
+
+  def calculateMinValueOfCompanyForGivenPeriod(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Float = {
+    var counter = 0;
+    var stockValueForGivenDay: Float = 0;
+    val fivemin = 5.minute
+    val listFromFuture: List[Quotation] =  Await.result(companiesData, fivemin)
+    var selectedQuotations = new ListBuffer[Quotation]
+    var minValues = new ListBuffer[Float]
+    //    val listFromFuture = companiesData.result(fivemin)
+    //Dirty hack!!!!
+    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date=>listFromFuture.map(q=>if (q.date.equals(date)){
+      selectedQuotations += q
+    }))
+    selectedQuotations.map(q=>minValues+=q.min)
+    return minValues.min
+  }
+
+
+  def calculateEaseOfMovement(companiesData: Future[List[Quotation]], pastDateFrom: java.util.Date, pastDateTo: java.util.Date, presentDateFrom: java.util.Date, presentDateTo: java.util.Date): Float ={
+
+    val maxPresent = this.calculateMaxValueOfCompanyForGivenPeriod(companiesData, presentDateFrom, presentDateTo)
+    val minPresent = this.calculateMinValueOfCompanyForGivenPeriod(companiesData, presentDateFrom, presentDateTo)
+
+    val maxPast = this.calculateMaxValueOfCompanyForGivenPeriod(companiesData, pastDateFrom, pastDateTo)
+    val minPast = this.calculateMinValueOfCompanyForGivenPeriod(companiesData, pastDateFrom, pastDateTo)
+
+    return ((maxPresent+minPresent)/2 - (maxPast+minPast)/2)/maxPresent-minPresent
+
+  }
+
+
 }
 
 object StocksActor {
