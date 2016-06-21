@@ -30,7 +30,7 @@ playapp:
 
 db:
   build: .
-  dockerfile: mysql-dockerfile
+  dockerfile: mysql-docker/mysql-dockerfile
   ports:
     - "3306:3306"
   environment:
