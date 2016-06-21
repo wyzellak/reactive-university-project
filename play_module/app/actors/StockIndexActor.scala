@@ -17,14 +17,6 @@ case class StockIndexValue(value: Double, tickerSymbol: String)
   */
 object StockIndexActor extends App {
 
-  def performCalculations() = {
-
-    calculate(2, List(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0), "AAPL")
-    calculate(4, List(2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0), "GOOG")
-    calculate(6, List(3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0), "EOAN")
-
-  }
-
   /**
     * Calculates the stock market index value
     *

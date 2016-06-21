@@ -30,8 +30,6 @@ public class UserActor extends UntypedActor {
             StocksActor.stocksActor().tell(new WatchStock(stockSymbol), getSelf());
         }
 
-        // Create the StockIndexActor actor and do some computations
-        StockIndexActor.performCalculations();
     }
     
     public void onReceive(Object message) {
