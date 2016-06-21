@@ -1,7 +1,7 @@
-package actors.stock
+package actors
 
 import akka.actor._
-import akka.routing.{RoundRobinPool}
+import akka.routing.RoundRobinPool
 
 sealed trait StockIndexMessage
 
