@@ -23,7 +23,7 @@ object StockIndexAlgorithms {
     * @return
     */
 
-  def calculateMovingAveragesOnActorSystem(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date) = {
+  def calculateMovingAveragesOnActorSystem(companiesData: Future[Seq[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date) = {
     val start = new DateTime(dateFrom)
     val end = new DateTime(dateTo)
     var stockValuesForPeriodDateFromDateTo = new ListBuffer[Double]
@@ -68,9 +68,9 @@ object StockIndexAlgorithms {
     * @return
     */
 
-  def calculateAverageValueForStockForGivenDay(companiesData: Future[List[Quotation]], date: java.util.Date) : Float = {
+  def calculateAverageValueForStockForGivenDay(companiesData: Future[Seq[Quotation]], date: java.util.Date) : Double = {
     var counter = 0;
-    var stockValueForGivenDay: Float = 0;
+    var stockValueForGivenDay: Double = 0;
     val fivemin = 5.minute
     val listFromFuture =  Await.result(companiesData, fivemin)
     //    val listFromFuture = companiesData.result(fivemin)
@@ -88,13 +88,13 @@ object StockIndexAlgorithms {
 
   /** 3 - BEGIN CALCULATE EASE OF MOVEMENT (from date to date, from date to date) **/
 
-  def calculateMaxValueOfCompanyForGivenPeriod(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Float = {
+  def calculateMaxValueOfCompanyForGivenPeriod(companiesData: Future[Seq[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Double = {
     var counter = 0;
-    var stockValueForGivenDay: Float = 0;
+    var stockValueForGivenDay: Double = 0;
     val fivemin = 5.minute
-    val listFromFuture: List[Quotation] =  Await.result(companiesData, fivemin)
+    val listFromFuture: Seq[Quotation] =  Await.result(companiesData, fivemin)
     var selectedQuotations = new ListBuffer[Quotation]
-    var maxValues = new ListBuffer[Float]
+    var maxValues = new ListBuffer[Double]
     //    val listFromFuture = companiesData.result(fivemin)
     //Dirty hack!!!!
     io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date=>listFromFuture.map(q=>if (q.date.equals(date)){
@@ -104,13 +104,13 @@ object StockIndexAlgorithms {
     return maxValues.max
   }
 
-  def calculateMinValueOfCompanyForGivenPeriod(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Float = {
+  def calculateMinValueOfCompanyForGivenPeriod(companiesData: Future[Seq[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Double = {
     var counter = 0;
-    var stockValueForGivenDay: Float = 0;
+    var stockValueForGivenDay: Double = 0;
     val fivemin = 5.minute
-    val listFromFuture: List[Quotation] =  Await.result(companiesData, fivemin)
+    val listFromFuture: Seq[Quotation] =  Await.result(companiesData, fivemin)
     var selectedQuotations = new ListBuffer[Quotation]
-    var minValues = new ListBuffer[Float]
+    var minValues = new ListBuffer[Double]
     //    val listFromFuture = companiesData.result(fivemin)
     //Dirty hack!!!!
     io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date=>listFromFuture.map(q=>if (q.date.equals(date)){
@@ -130,7 +130,7 @@ object StockIndexAlgorithms {
     * @return
     */
 
-  def calculateEaseOfMovement(companiesData: Future[List[Quotation]], pastDateFrom: java.util.Date, pastDateTo: java.util.Date, presentDateFrom: java.util.Date, presentDateTo: java.util.Date): Float ={
+  def calculateEaseOfMovement(companiesData: Future[Seq[Quotation]], pastDateFrom: java.util.Date, pastDateTo: java.util.Date, presentDateFrom: java.util.Date, presentDateTo: java.util.Date): Double ={
 
     val maxPresent = this.calculateMaxValueOfCompanyForGivenPeriod(companiesData, presentDateFrom, presentDateTo)
     val minPresent = this.calculateMinValueOfCompanyForGivenPeriod(companiesData, presentDateFrom, presentDateTo)
