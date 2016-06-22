@@ -91,35 +91,37 @@ class Worker extends Actor {
 
       case IndexName.AVERAGE_TRUE_RANGE => {
 
-        var res : Double = 0.0
-        val date = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
-        res = StockIndexAlgorithms.calculateAverageValueForStockForGivenDay(quotation, date)
+        var res : Double = 12345.0
+//        val date = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
+//        res = StockIndexAlgorithms.calculateAverageValueForStockForGivenDay(quotation, date)
         res
 
       }
 
       case IndexName.EASE_OF_MOVEMENT => {
 
-        var res : Double = 0.0
-        val pastFromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-        val pastToDate = Date.from(LocalDate.of(2016,2,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-        val presentFromDate = Date.from(LocalDate.of(2016,3,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-        val presentToDate = Date.from(LocalDate.of(2016,4,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
-        res = StockIndexAlgorithms.calculateEaseOfMovement(quotation, pastFromDate, pastToDate, presentFromDate, presentToDate)
+        var res : Double = 12345.0
+//        val pastFromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//        val pastToDate = Date.from(LocalDate.of(2016,2,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//        val presentFromDate = Date.from(LocalDate.of(2016,3,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//        val presentToDate = Date.from(LocalDate.of(2016,4,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
+//        res = StockIndexAlgorithms.calculateEaseOfMovement(quotation, pastFromDate, pastToDate, presentFromDate, presentToDate)
         res
 
       }
 
       case IndexName.MOVING_AVERAGE => {
 
-        var res = new ListBuffer[Double]()
-        val fromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-        val toDate = Date.from(LocalDate.of(2017,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
-        res = StockIndexAlgorithms.calculateMovingAveragesOnActorSystem(quotation, fromDate, toDate)
-        res.head
+        var res : Double = 12345.0
+//        var resBuffer = new ListBuffer[Double]()
+//        val fromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//        val toDate = Date.from(LocalDate.of(2017,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
+//        resBuffer = StockIndexAlgorithms.calculateMovingAveragesOnActorSystem(quotation, fromDate, toDate)
+//        res = resBuffer.head
+        res
 
       }
 
@@ -142,9 +144,9 @@ class Listener extends Actor {
     case StockIndexValue(listOfResults, indexName, companyNames) =>
 
       println("\n\t-===============================-"
-        + "\tStock index approximation results"
-        + "\tFor stock index %s".format(indexName)
-        + "\t-===============================-")
+            + "\n\tStock index approximation results"
+            + "\n\tFor stock index %s".format(indexName)
+            + "\n\t-===============================-")
 
       for ( (name, value) <- companyNames zip listOfResults) {
         println("\n\tFor ticker symbol (company name): %s".format(name))
