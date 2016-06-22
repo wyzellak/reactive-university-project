@@ -51,19 +51,19 @@ object IndexService {
 
   private def calculateAverageTrueRange(indexName: IndexName, companyNames: Seq[String]): Future[Double] = {
 
-    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 8, indexName, companyNames)
+    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 4, indexName, companyNames)
 
   }
 
   private def calculateEaseOfMovement(indexName: IndexName, companyNames: Seq[String]): Future[Double] = {
 
-    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 2, indexName, companyNames)
+    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 4, indexName, companyNames)
 
   }
 
   private def calculateMovingAverage(indexName: IndexName, companyNames: Seq[String]): Future[Double] = {
 
-    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 2, indexName, companyNames)
+    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 4, indexName, companyNames)
 
     //TODO calculateMovingAveragesOnActorSystem(QuotationService.listAllQuotations , dateFrom, dateTo)
     //TODO invoke calculateMovingAveragesOnActorSystem(companiesData: List[Quotation], dateFrom: java.util.Date, dateTo: java.util.Date)
