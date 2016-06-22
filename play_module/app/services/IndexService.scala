@@ -3,7 +3,7 @@ package services
 import java.time.{LocalDate, ZoneId}
 import java.util.Date
 
-import actors.StocksActor
+import actors.{StockIndexActor, StocksActor}
 import akka.actor.{ActorSystem, Props}
 import model.IndexName.IndexName
 import model.{IndexName, Quotation}
@@ -26,11 +26,11 @@ object IndexService {
       calculateTest(companyNames, fromDate, toDate)
     }
 
-    case IndexName.AVERAGE_TRUE_RANGE => calculateAverageTrueRange()
+    case IndexName.AVERAGE_TRUE_RANGE => calculateAverageTrueRange(indexName, companyNames)
 
-    case IndexName.EASE_OF_MOVEMENT => calculateEaseOfMovement()
+    case IndexName.EASE_OF_MOVEMENT => calculateEaseOfMovement(indexName, companyNames)
 
-    case IndexName.MOVING_AVERAGE => calculateMovingAverage()
+    case IndexName.MOVING_AVERAGE => calculateMovingAverage(indexName, companyNames)
 
     case default => Future.successful(0.0)
   }
@@ -49,29 +49,29 @@ object IndexService {
     Future.successful(1.0)
   }
 
-  private def calculateAverageTrueRange(): Future[Double] = {
-    //TODO
-    Future.successful(1.0)
+  private def calculateAverageTrueRange(indexName: IndexName, companyNames: Seq[String]): Future[Double] = {
+
+    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 8, indexName, companyNames)
+
   }
 
-  private def calculateEaseOfMovement(): Future[Double] = {
-//TODO
+  private def calculateEaseOfMovement(indexName: IndexName, companyNames: Seq[String]): Future[Double] = {
 
-    Future.successful(1.0)
+    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 2, indexName, companyNames)
+
   }
 
-  /**
-    * uot
-    * @return
-    */
-  private def calculateMovingAverage(): Future[Double] = {
-//   TODO calculateMovingAveragesOnActorSystem(QuotationService.listAllQuotations , dateFrom, dateTo)
+  private def calculateMovingAverage(indexName: IndexName, companyNames: Seq[String]): Future[Double] = {
+
+    StockIndexActor.calculateUsingActorsWithWorkersAmountOf(workersAmount = 2, indexName, companyNames)
+
+    //TODO calculateMovingAveragesOnActorSystem(QuotationService.listAllQuotations , dateFrom, dateTo)
     //TODO invoke calculateMovingAveragesOnActorSystem(companiesData: List[Quotation], dateFrom: java.util.Date, dateTo: java.util.Date)
     //from actor system  - will return list of values for date interval for given stock
     //TODO calculateAverageFromMovingAveragesForIndex() - to powinno zwrocic wynik
 
-
     Future.successful(1.0)
+
   }
 
   private def getTestData(): List[Double] = {
