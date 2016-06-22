@@ -20,7 +20,21 @@ import scala.concurrent.{Await, Future}
   * values.  Each StockActor updates a rolling dataset of randomly generated stock values.
   */
 
+
+object StocksActor {
+  lazy val stocksActor: ActorRef = Akka.system.actorOf(Props(classOf[StocksActor]))
+}
+
+case object FetchLatest
+case class StockUpdate(symbol: String, price: Number)
+case class StockHistory(symbol: String, history: java.util.List[java.lang.Double])
+case class WatchStock(symbol: String)
+case class UnwatchStock(symbol: Option[String])
+
+
 class StockActor(symbol: String) extends Actor {
+
+  /** 0 - BEGIN PREVIOUS CODE **/
 
   lazy val stockQuote: StockQuote = new FakeStockQuote
 
@@ -71,135 +85,8 @@ class StocksActor extends Actor {
       context.children.foreach(_.forward(unwatchStock))
   }
 
-
-
-
-  def calculateMovingAveragesOnActorSystem(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date) = {
-    val start = new DateTime(dateFrom)
-    val end = new DateTime(dateTo)
-    var stockValuesForPeriodDateFromDateTo = new ListBuffer[Double]
-
-    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date =>
-      stockValuesForPeriodDateFromDateTo+=this
-      .calculateAverageValueForStockForGivenDay(companiesData, new java.util.Date(date.yyyy,date.mm,date.dd)))
-
-    this.calculateMovingAveragesForIndex(stockValuesForPeriodDateFromDateTo.toList)
-  }
-
-  def calculateAverageFromMovingAveragesForIndex(closingDayPrices: List[Double]): Double = {
-    this.calculateWeightedMovingAverage(closingDayPrices)
-  }
-
-  def calculateWeightedMovingAverage(closingDayPrices: List[Double])={
-    val sum: Double= closingDayPrices.sum
-    sum/closingDayPrices.size
-  }
-
-  def calculateMovingAveragesForIndex(closingDayIndexPricesForLongerPeriod: List[Double])={
-    val closingDayPricesForLongerPeriodAmount = closingDayIndexPricesForLongerPeriod.size
-    var middleSlot = closingDayPricesForLongerPeriodAmount/2
-    var results = new ListBuffer[Double]()
-
-    for( i <- 0 until middleSlot) {
-      val listToBePassed = closingDayIndexPricesForLongerPeriod.slice(i, middleSlot)
-      var resultToBeAppended = calculateWeightedMovingAverage(listToBePassed)
-      results += resultToBeAppended
-      if(middleSlot<=closingDayPricesForLongerPeriodAmount){
-        middleSlot+=1
-      }
-    }
-    results
-  }
-
-  /**
-    *
-    * @param companiesData
-    * @param date
-    * @return
-    */
-
-  def calculateAverageValueForStockForGivenDay(companiesData: Future[List[Quotation]], date: java.util.Date) = {
-    var counter = 0;
-    var stockValueForGivenDay: Float = 0;
-    val fivemin = 5.minute
-    val listFromFuture =  Await.result(companiesData, fivemin)
-//    val listFromFuture = companiesData.result(fivemin)
-    //Dirty hack!!!!
-    listFromFuture.map(q=>if(q.date.equals(date)){
-      stockValueForGivenDay+=q.closing
-      counter+=1
-    })
-
-    stockValueForGivenDay/counter
-  }
-
-
-  def calculateMaxValueOfCompanyForGivenPeriod(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Float = {
-    var counter = 0;
-    var stockValueForGivenDay: Float = 0;
-    val fivemin = 5.minute
-    val listFromFuture: List[Quotation] =  Await.result(companiesData, fivemin)
-    var selectedQuotations = new ListBuffer[Quotation]
-    var maxValues = new ListBuffer[Float]
-    //    val listFromFuture = companiesData.result(fivemin)
-    //Dirty hack!!!!
-    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date=>listFromFuture.map(q=>if (q.date.equals(date)){
-      selectedQuotations += q
-    }))
-    selectedQuotations.map(q=>maxValues+=q.max)
-    return maxValues.max
-  }
-
-  def calculateMinValueOfCompanyForGivenPeriod(companiesData: Future[List[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Float = {
-    var counter = 0;
-    var stockValueForGivenDay: Float = 0;
-    val fivemin = 5.minute
-    val listFromFuture: List[Quotation] =  Await.result(companiesData, fivemin)
-    var selectedQuotations = new ListBuffer[Quotation]
-    var minValues = new ListBuffer[Float]
-    //    val listFromFuture = companiesData.result(fivemin)
-    //Dirty hack!!!!
-    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date=>listFromFuture.map(q=>if (q.date.equals(date)){
-      selectedQuotations += q
-    }))
-    selectedQuotations.map(q=>minValues+=q.min)
-    return minValues.min
-  }
-
-
-  def calculateEaseOfMovement(companiesData: Future[List[Quotation]], pastDateFrom: java.util.Date, pastDateTo: java.util.Date, presentDateFrom: java.util.Date, presentDateTo: java.util.Date): Float ={
-
-    val maxPresent = this.calculateMaxValueOfCompanyForGivenPeriod(companiesData, presentDateFrom, presentDateTo)
-    val minPresent = this.calculateMinValueOfCompanyForGivenPeriod(companiesData, presentDateFrom, presentDateTo)
-
-    val maxPast = this.calculateMaxValueOfCompanyForGivenPeriod(companiesData, pastDateFrom, pastDateTo)
-    val minPast = this.calculateMinValueOfCompanyForGivenPeriod(companiesData, pastDateFrom, pastDateTo)
-
-    return ((maxPresent+minPresent)/2 - (maxPast+minPast)/2)/maxPresent-minPresent
-
-  }
+  /** 0 - END PREVIOUS CODE **/
 
 
 }
 
-object StocksActor {
-  lazy val stocksActor: ActorRef = Akka.system.actorOf(Props(classOf[StocksActor]))
-}
-
-/**
-  * u
-  *
-  * @param symbol
-  * @param companiesData
-  */
-case class MovingAverageCalculation(symbol: String, companiesData: List[Quotation])
-
-case object FetchLatest
-
-case class StockUpdate(symbol: String, price: Number)
-
-case class StockHistory(symbol: String, history: java.util.List[java.lang.Double])
-
-case class WatchStock(symbol: String)
-
-case class UnwatchStock(symbol: Option[String])
