@@ -80,7 +80,8 @@ object StockIndexAlgorithms {
       counter+=1
     })
 
-    stockValueForGivenDay/counter
+    var result : Double = stockValueForGivenDay/counter
+    result
   }
 
   /** 2 - END CALCULATE AVERAGE VALUE **/
