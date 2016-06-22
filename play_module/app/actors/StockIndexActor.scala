@@ -24,14 +24,14 @@ case class StockIndexValue(listOfResults: ListBuffer[Double], indexName: IndexNa
   *
   * @author Piotr Kluch
   */
-object StockIndexActor extends App {
+object StockIndexActor {
 
   /**
     * Calculates the stock market index value
     *
     * @param workersAmount The amount of worker actors for computation
-    * @param numbers Numbers (data) for the computation
-    * @param tickerSymbol Ticker symbol for the particular stock on the market
+    * @param indexName Index name used for computation
+    * @param companyNames Ticker symbols for the particular stock on the market
     */
   def calculate(workersAmount: Int, numbers: List[Double], tickerSymbol: String) {
 
