@@ -33,7 +33,7 @@ object StockIndexActor {
     * @param indexName Index name used for computation
     * @param companyNames Ticker symbols for the particular stock on the market
     */
-  def calculate(workersAmount: Int, numbers: List[Double], tickerSymbol: String) {
+  def calculateUsingActorsWithWorkersAmountOf(workersAmount: Int, indexName: IndexName, companyNames: Seq[String]) = {
 
     // Create an Akka system
     val system = ActorSystem("StockIndexActorSystem")
