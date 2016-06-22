@@ -91,7 +91,9 @@ class Worker extends Actor {
 
       case IndexName.AVERAGE_TRUE_RANGE => {
 
-        var res : Double = 12345.0
+        var sleepDuration = 1000 + scala.util.Random.nextInt( (3000 - 1000) + 1 )
+        Thread.sleep(sleepDuration)
+        var res : Double = scala.util.Random.nextDouble()
 //        val date = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
 //        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
 //        res = StockIndexAlgorithms.calculateAverageValueForStockForGivenDay(quotation, date)
@@ -101,7 +103,8 @@ class Worker extends Actor {
 
       case IndexName.EASE_OF_MOVEMENT => {
 
-        var res : Double = 12345.0
+        Thread.sleep(3000)
+        var res : Double = scala.util.Random.nextDouble()
 //        val pastFromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
 //        val pastToDate = Date.from(LocalDate.of(2016,2,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
 //        val presentFromDate = Date.from(LocalDate.of(2016,3,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
@@ -114,7 +117,8 @@ class Worker extends Actor {
 
       case IndexName.MOVING_AVERAGE => {
 
-        var res : Double = 12345.0
+        Thread.sleep(3000)
+        var res : Double = scala.util.Random.nextDouble()
 //        var resBuffer = new ListBuffer[Double]()
 //        val fromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
 //        val toDate = Date.from(LocalDate.of(2017,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
