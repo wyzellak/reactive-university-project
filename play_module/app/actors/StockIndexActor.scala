@@ -1,7 +1,16 @@
 package actors
 
+import java.time.{LocalDate, ZoneId}
+import java.util.Date
+
 import akka.actor._
 import akka.routing.RoundRobinPool
+import model.{IndexName, Quotation}
+import model.IndexName._
+import services.QuotationService
+
+import scala.collection.mutable.ListBuffer
+import scala.concurrent.Future
 
 sealed trait StockIndexMessage
 
