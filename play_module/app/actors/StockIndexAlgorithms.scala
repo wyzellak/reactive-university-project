@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 /**
   * Created by peter on 22/06/16.
   */
-class StockIndexAlgorithms {
+object StockIndexAlgorithms {
 
 
   /** 1 - BEGIN CALCULATE MOVING AVERAGE (from date to date) **/
