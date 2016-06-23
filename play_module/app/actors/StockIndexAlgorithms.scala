@@ -23,15 +23,32 @@ object StockIndexAlgorithms {
     */
 
   def calculateMovingAveragesOnActorSystem(companiesData: Future[Seq[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date) = {
-    val start = new DateTime(dateFrom)
-    val end = new DateTime(dateTo)
-    var stockValuesForPeriodDateFromDateTo = new ListBuffer[Double]
 
-    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date =>
-      stockValuesForPeriodDateFromDateTo+=this
-        .calculateAverageValueForStockForGivenDay(companiesData, new java.util.Date(date.yyyy,date.mm,date.dd)))
+    val fivemin = 5.minutes
+    val listFromFuture: Seq[Quotation] =  Await.result(companiesData, fivemin)
 
-    this.calculateMovingAveragesForIndex(stockValuesForPeriodDateFromDateTo.toList)
+    var selectedQuotations = new ListBuffer[Quotation]
+
+    var closingDayPricesForLongerPeriodAmount : Double = 0.0
+
+    listFromFuture.map(
+      q => {
+        if ( q.date.after(dateFrom) && q.date.before(dateTo) ) {
+
+          selectedQuotations += q
+          closingDayPricesForLongerPeriodAmount += q.closing.toDouble
+
+        }
+      })
+
+    var listOfPrices = ListBuffer.empty[Double]
+
+    selectedQuotations.map(
+      q => listOfPrices += q.closing
+    )
+
+    this.calculateMovingAveragesForIndex(listOfPrices)
+
   }
 
   def calculateWeightedMovingAverage(closingDayPrices: List[Double])={
