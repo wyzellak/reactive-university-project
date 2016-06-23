@@ -65,7 +65,7 @@ class Master(workersAmount: Int, indexName: IndexName, companyNames: Seq[String]
   val workerRouter = context.actorOf(
     Props[Worker].withRouter(RoundRobinPool(workersAmount)), name = "workerRouterPool")
 
-  context.setReceiveTimeout(5 seconds)
+  context.setReceiveTimeout(2500 milliseconds)
 
   def notifyListener() = {
 
