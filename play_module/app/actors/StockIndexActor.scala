@@ -6,6 +6,7 @@ import java.util.Date
 
 import akka.actor._
 import akka.routing.RoundRobinPool
+import akka.util.Timeout
 import model.{IndexName, Quotation}
 import model.IndexName._
 import services.QuotationService
@@ -64,6 +65,17 @@ class Master(workersAmount: Int, indexName: IndexName, companyNames: Seq[String]
   val workerRouter = context.actorOf(
     Props[Worker].withRouter(RoundRobinPool(workersAmount)), name = "workerRouterPool")
 
+  context.setReceiveTimeout(5 seconds)
+
+  def notifyListener() = {
+
+    // Send the result to the listener
+    listener ! StockIndexValue(listOfResults, indexName, companyNames)
+    // Stops this actor and all its supervised children
+    context.stop(self)
+
+  }
+
   def receive = {
 
     case Calculate =>
@@ -72,14 +84,11 @@ class Master(workersAmount: Int, indexName: IndexName, companyNames: Seq[String]
     case PartialResult(value) =>
       listOfResults += value
       resultsCount += 1
-      if (resultsCount == companiesAmount) {
+      if (resultsCount == companiesAmount) this.notifyListener()
 
-        // Send the result to the listener
-        listener ! StockIndexValue(listOfResults, indexName, companyNames)
-        // Stops this actor and all its supervised children
-        context.stop(self)
-
-      }
+    case ReceiveTimeout =>
+      resultsCount += 1
+      if (resultsCount == companiesAmount) this.notifyListener()
 
   }
 
@@ -179,8 +188,9 @@ class Worker extends Actor {
   }
 
   def receive = {
-    case Work(indexName: IndexName, companyName: String) =>
-      sender ! PartialResult(calculateStockIndexFor(indexName, companyName)) // Perform the work
+    case Work(indexName: IndexName, companyName: String) => {
+      val future = sender ! PartialResult(calculateStockIndexFor(indexName, companyName)) // Perform the work
+    }
   }
 }
 
