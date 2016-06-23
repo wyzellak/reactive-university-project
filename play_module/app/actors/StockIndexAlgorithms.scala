@@ -76,66 +76,53 @@ object StockIndexAlgorithms {
   /** 1 - END CALCULATE MOVING AVERAGE **/
 
 
-  /** 2 - BEGIN CALCULATE AVERAGE VALUE (for single date (day granularity)) **/
-
-  /**
-    *
-    * @param companiesData
-    * @param date
-    * @return
-    */
-
-  def calculateAverageValueForStockForGivenDay(companiesData: Future[Seq[Quotation]], date: java.util.Date) : Double = {
-    var counter = 0;
-    var stockValueForGivenDay: Double = 0;
-    val fivemin = 5.minute
-    val listFromFuture =  Await.result(companiesData, fivemin)
-    //    val listFromFuture = companiesData.result(fivemin)
-    //Dirty hack!!!!
-    listFromFuture.map(q=>if(q.date.equals(date)){
-      stockValueForGivenDay+=q.closing
-      counter+=1
-    })
-
-    var result : Double = stockValueForGivenDay/counter
-    result
-  }
-
-  /** 2 - END CALCULATE AVERAGE VALUE **/
-
-
-  /** 3 - BEGIN CALCULATE EASE OF MOVEMENT (from date to date, from date to date) **/
+  /** 2 - BEGIN CALCULATE EASE OF MOVEMENT (from date to date, from date to date) **/
 
   def calculateMaxValueOfCompanyForGivenPeriod(companiesData: Future[Seq[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Double = {
-    var counter = 0;
-    var stockValueForGivenDay: Double = 0;
+
     val fivemin = 5.minute
     val listFromFuture: Seq[Quotation] =  Await.result(companiesData, fivemin)
     var selectedQuotations = new ListBuffer[Quotation]
     var maxValues = new ListBuffer[Double]
-    //    val listFromFuture = companiesData.result(fivemin)
-    //Dirty hack!!!!
-    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date=>listFromFuture.map(q=>if (q.date.equals(date)){
-      selectedQuotations += q
-    }))
-    selectedQuotations.map(q=>maxValues+=q.max)
-    return maxValues.max
+
+    listFromFuture.map(
+      q => {
+        if ( q.date.after(dateFrom) && q.date.before(dateTo) ) {
+
+          selectedQuotations += q
+
+        }
+      })
+
+    selectedQuotations.map(
+      q => maxValues += q.max
+    )
+
+    maxValues.max
+
   }
 
   def calculateMinValueOfCompanyForGivenPeriod(companiesData: Future[Seq[Quotation]], dateFrom: java.util.Date, dateTo: java.util.Date): Double = {
-    var counter = 0;
-    var stockValueForGivenDay: Double = 0;
+
     val fivemin = 5.minute
     val listFromFuture: Seq[Quotation] =  Await.result(companiesData, fivemin)
     var selectedQuotations = new ListBuffer[Quotation]
     var minValues = new ListBuffer[Double]
-    //    val listFromFuture = companiesData.result(fivemin)
-    //Dirty hack!!!!
-    io.lamma.Date(dateFrom.getYear(),dateFrom.getMonth(),dateFrom.getDay()) to io.lamma.Date(dateTo.getYear(),dateTo.getMonth(),dateTo.getDay()) map(date=>listFromFuture.map(q=>if (q.date.equals(date)){
-      selectedQuotations += q
-    }))
-    selectedQuotations.map(q=>minValues+=q.min)
-    return minValues.min
+
+    listFromFuture.map(
+      q => {
+        if ( q.date.after(dateFrom) && q.date.before(dateTo) ) {
+
+          selectedQuotations += q
+
+        }
+      })
+
+    selectedQuotations.map(
+      q => minValues += q.min
+    )
+
+    minValues.min
   }
 
   /**
@@ -156,10 +143,44 @@ object StockIndexAlgorithms {
     val maxPast = this.calculateMaxValueOfCompanyForGivenPeriod(companiesData, pastDateFrom, pastDateTo)
     val minPast = this.calculateMinValueOfCompanyForGivenPeriod(companiesData, pastDateFrom, pastDateTo)
 
-    return ((maxPresent+minPresent)/2 - (maxPast+minPast)/2)/maxPresent-minPresent
+    return ( ( maxPresent+minPresent ) / 2 - ( maxPast + minPast ) / 2 ) / maxPresent - minPresent
 
   }
 
-  /** 3 - END CALCULATE AVERAGE VALUE **/
+  /** 2 - END CALCULATE AVERAGE VALUE **/
+
+
+  /** X - BEGIN CALCULATE AVERAGE VALUE (for single date (day granularity)) **/
+
+  /**
+    *
+    * @param companiesData
+    * @param date
+    * @return
+    */
+
+  def calculateAverageValueForStockForGivenDay(companiesData: Future[Seq[Quotation]], date: java.util.Date) : Double = {
+    var counter = 0;
+    var stockValueForGivenDay: Double = 0;
+    val fivemin = 5.minute
+    val listFromFuture =  Await.result(companiesData, fivemin)
+
+    listFromFuture.map(q=>if(q.date.equals(date)){
+      stockValueForGivenDay+=q.closing
+      counter+=1
+    })
+
+    var result : Double = stockValueForGivenDay/counter
+    result
+  }
+
+  /** X - END CALCULATE AVERAGE VALUE **/
+
+
+  /** 3 - BEGIN CALCULATE AVERAGE TRUE RANGE **/
+
+  //TODO
+
+  /** 3 - END CALCULATE AVERAGE TRUE RANGE **/
 
 }
