@@ -18,12 +18,12 @@ import scala.concurrent.{Await, Future}
   */
 object IndexService {
 
-  def runIndex(indexName: IndexName, companyNames: Seq[String]): Future[Double] = indexName match {
+  def runIndex(indexName: IndexName, companyNames: Seq[String], start_date: Date, end_date: Date): Future[Double] = indexName match {
     case IndexName.TEST => {
-      val fromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-      val toDate = Date.from(LocalDate.of(2016,2,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//      val fromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
+//      val toDate = Date.from(LocalDate.of(2016,2,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
 
-      calculateTest(companyNames, fromDate, toDate)
+      calculateTest(companyNames, start_date, end_date)
     }
 
     case IndexName.AVERAGE_TRUE_RANGE => calculateAverageTrueRange()
