@@ -1,5 +1,6 @@
 package actors
 
+import java.text.SimpleDateFormat
 import java.time.{LocalDate, ZoneId}
 import java.util.Date
 
@@ -91,40 +92,79 @@ class Worker extends Actor {
 
       case IndexName.AVERAGE_TRUE_RANGE => {
 
-        var sleepDuration = 1000 + scala.util.Random.nextInt( (3000 - 1000) + 1 )
-        Thread.sleep(sleepDuration)
-        var res : Double = scala.util.Random.nextDouble()
-//        val date = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-//        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
-//        res = StockIndexAlgorithms.calculateAverageValueForStockForGivenDay(quotation, date)
+//        var sleepOneToTenSeconds = 1000 + scala.util.Random.nextInt( (10000 - 1000) + 1 )
+//        Thread.sleep(sleepOneToTenSeconds)
+
+        var res : Double = 0.0
+
+        for( a <- 1 to 1000) {
+
+          val format = new SimpleDateFormat("dd/MM/yyy")
+          var date = new java.util.Date()
+
+          date = format.parse("01/04/2016")
+
+          val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
+          res = StockIndexAlgorithms.calculateAverageValueForStockForGivenDay(quotation, date)
+
+        }
+
         res
 
       }
 
       case IndexName.EASE_OF_MOVEMENT => {
 
-        Thread.sleep(3000)
-        var res : Double = scala.util.Random.nextDouble()
-//        val pastFromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-//        val pastToDate = Date.from(LocalDate.of(2016,2,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-//        val presentFromDate = Date.from(LocalDate.of(2016,3,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-//        val presentToDate = Date.from(LocalDate.of(2016,4,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-//        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
-//        res = StockIndexAlgorithms.calculateEaseOfMovement(quotation, pastFromDate, pastToDate, presentFromDate, presentToDate)
+//        var sleepOneToTenSeconds = 1000 + scala.util.Random.nextInt( (10000 - 1000) + 1 )
+//        Thread.sleep(sleepOneToTenSeconds)
+
+        var res: Double = 0.0
+
+        for( a <- 1 to 1000) {
+
+          val format = new SimpleDateFormat("dd/MM/yyy")
+          var pastFromDate = new java.util.Date()
+          var pastToDate = new java.util.Date()
+          var presentFromDate = new java.util.Date()
+          var presentToDate = new java.util.Date()
+
+          pastFromDate = format.parse("01/01/2016")
+          pastToDate = format.parse("06/04/2017")
+          presentFromDate = format.parse("01/01/2016")
+          presentToDate = format.parse("06/04/2016")
+
+          val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
+          res = StockIndexAlgorithms.calculateEaseOfMovement(quotation, pastFromDate, pastToDate, presentFromDate, presentToDate)
+
+        }
+
         res
 
       }
 
       case IndexName.MOVING_AVERAGE => {
 
-        Thread.sleep(3000)
-        var res : Double = scala.util.Random.nextDouble()
-//        var resBuffer = new ListBuffer[Double]()
-//        val fromDate = Date.from(LocalDate.of(2016,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-//        val toDate = Date.from(LocalDate.of(2017,1,1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant)
-//        val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
-//        resBuffer = StockIndexAlgorithms.calculateMovingAveragesOnActorSystem(quotation, fromDate, toDate)
-//        res = resBuffer.head
+//        var sleepOneToTenSeconds = 1000 + scala.util.Random.nextInt( (10000 - 1000) + 1 )
+//        Thread.sleep(sleepOneToTenSeconds)
+
+        var res: Double = 0.0
+
+        for( a <- 1 to 1000) {
+
+          val format = new SimpleDateFormat("dd/MM/yyy")
+          var fromDate = new java.util.Date()
+          var toDate = new java.util.Date()
+
+          fromDate = format.parse("01/01/2016")
+          toDate = format.parse("06/04/2017")
+
+          var resBuffer = new ListBuffer[Double]()
+          val quotation: Future[Seq[Quotation]] = QuotationService.getByCompanyName(companyName)
+          resBuffer = StockIndexAlgorithms.calculateMovingAveragesOnActorSystem(quotation, fromDate, toDate)
+          res = resBuffer.head
+
+        }
+
         res
 
       }
@@ -147,6 +187,7 @@ class Listener extends Actor {
   def receive = {
     case StockIndexValue(listOfResults, indexName, companyNames) =>
 
+      println("\n\n----------------------------------------------")
       println("\n\t-===============================-"
             + "\n\tStock index approximation results"
             + "\n\tFor stock index %s".format(indexName)
