@@ -51,12 +51,12 @@ object StockIndexAlgorithms {
 
   }
 
-  def calculateWeightedMovingAverage(closingDayPrices: List[Double])={
+  def calculateWeightedMovingAverage(closingDayPrices: ListBuffer[Double])={
     val sum: Double= closingDayPrices.sum
     sum/closingDayPrices.size
   }
 
-  def calculateMovingAveragesForIndex(closingDayIndexPricesForLongerPeriod: List[Double])={
+  def calculateMovingAveragesForIndex(closingDayIndexPricesForLongerPeriod: ListBuffer[Double])={
     val closingDayPricesForLongerPeriodAmount = closingDayIndexPricesForLongerPeriod.size
     var middleSlot = closingDayPricesForLongerPeriodAmount/2
     var results = new ListBuffer[Double]()
@@ -70,6 +70,7 @@ object StockIndexAlgorithms {
       }
     }
     results
+
   }
 
   /** 1 - END CALCULATE MOVING AVERAGE **/
