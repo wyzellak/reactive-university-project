@@ -11,7 +11,8 @@ import model.IndexName._
 import services.QuotationService
 
 import scala.collection.mutable.ListBuffer
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
 
 sealed trait StockIndexMessage
 
@@ -56,7 +57,6 @@ object StockIndexActor {
 }
 
 class Master(workersAmount: Int, indexName: IndexName, companyNames: Seq[String], listener: ActorRef) extends Actor {
-  var calculationResult: Double = 0.0
   var listOfResults: ListBuffer[Double] = ListBuffer()
   var resultsCount: Integer = 0
   val companiesAmount: Integer = companyNames.length
@@ -70,14 +70,15 @@ class Master(workersAmount: Int, indexName: IndexName, companyNames: Seq[String]
       for (i <- 0 until companiesAmount ) workerRouter ! Work(indexName, companyNames(i))
 
     case PartialResult(value) =>
-      calculationResult += value
       listOfResults += value
       resultsCount += 1
       if (resultsCount == companiesAmount) {
+
         // Send the result to the listener
         listener ! StockIndexValue(listOfResults, indexName, companyNames)
         // Stops this actor and all its supervised children
         context.stop(self)
+
       }
 
   }
