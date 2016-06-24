@@ -1,0 +1,8 @@
+# This is a comment
+FROM dgraziotin/mysql
+MAINTAINER Kuba Antosik <find-me-on-github@example.com>
+
+COPY mysql-docker/stock_exchange.sql init.sql
+COPY mysql-docker/create_mysql_users.sh create_mysql_users.sh
+COPY mysql-docker/my.cnf /etc/mysql/my.cnf
+RUN chmod 777 create_mysql_users.sh
