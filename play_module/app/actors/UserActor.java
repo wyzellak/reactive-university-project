@@ -1,6 +1,5 @@
 package actors;
 
-import actors.stock.StockIndexActor;
 import akka.actor.UntypedActor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
